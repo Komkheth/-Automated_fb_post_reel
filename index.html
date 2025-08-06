@@ -3,528 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReelPoster - Facebook Reel Scheduler</title>
+    <title>ReelPoster - Facebook Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1877F2;
             --primary-dark: #166FE5;
             --secondary: #42B72A;
-            --accent: #FF7A00;
-            --dark: #1C1E21;
             --light: #F0F2F5;
+            --dark: #1C1E21;
             --gray: #8A8D91;
-            --light-gray: #E4E6EB;
-            --danger: #E0245E;
-            --success: #31A24C;
-            --warning: #F7B928;
-            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            background-color: var(--light);
             color: var(--dark);
             min-height: 100vh;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* Login screen */
-        .login-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
         }
         
         .login-card {
             background: white;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            padding: 40px;
-            width: 400px;
-            text-align: center;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         .login-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 28px;
-            margin-bottom: 30px;
             color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 24px;
         }
         
         .login-btn {
-            background: var(--primary);
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 6px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            width: 100%;
-            margin-top: 20px;
-            transition: var(--transition);
+            transition: background-color 0.3s;
         }
         
         .login-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
+            background-color: var(--primary-dark);
         }
         
-        /* Main app (hidden initially) */
-        .app-container {
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
             display: none;
         }
         
-        /* Header styles */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        .status.error {
+            background-color: #ffebee;
+            color: #d32f2f;
+            display: block;
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .status.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
         }
         
-        .logo i {
-            font-size: 36px;
-            color: var(--primary);
+        .status.info {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            display: block;
         }
         
-        .logo h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 28px;
-            color: var(--dark);
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 10px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .app-container {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
         }
         
         .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: var(--primary);
+            object-fit: cover;
+        }
+        
+        .logout-btn {
+            background-color: #f44336;
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        /* Main content grid */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        /* Card styles */
-        .card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            padding: 30px;
-            margin-bottom: 30px;
-            transition: var(--transition);
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .card-title {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 22px;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        /* Upload area styles */
-        .upload-area {
-            border: 3px dashed var(--gray);
-            border-radius: 15px;
-            padding: 40px 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            transition: var(--transition);
-            background: var(--light);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .upload-area.active {
-            border-color: var(--primary);
-            background: rgba(24, 119, 242, 0.05);
-        }
-        
-        .upload-area i {
-            font-size: 48px;
-            color: var(--primary);
-            margin-bottom: 20px;
-            transition: var(--transition);
-        }
-        
-        .upload-area h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-        
-        .upload-area p {
-            color: var(--gray);
-            font-size: 15px;
-            margin-bottom: 25px;
-        }
-        
-        /* Form styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 15px;
-        }
-        
-        input, textarea, select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--light-gray);
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 15px;
-            background: white;
-            transition: var(--transition);
-        }
-        
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
-        }
-        
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        /* Button styles */
-        .btn {
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
             border: none;
-            font-family: 'Poppins', sans-serif;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        
-        .btn-accent {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .btn-accent:hover {
-            background: #e66c00;
-            transform: translateY(-2px);
-        }
-        
-        /* Preview styles */
-        .preview-container {
-            margin-top: 25px;
-        }
-        
-        .preview-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .preview-box {
-            background: #1C1E21;
-            border-radius: 12px;
-            padding: 15px;
-            position: relative;
-            height: 450px;
-            overflow: hidden;
-        }
-        
-        .reel-player {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 240px;
-            height: 420px;
-            background: linear-gradient(45deg, #8a2387, #e94057, #f27121);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .reel-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .reel-user {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            font-weight: 500;
-        }
-        
-        .reel-user-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #555;
-            border: 2px solid white;
-        }
-        
-        .reel-content {
-            text-align: center;
-            color: white;
-            padding: 0 10px;
-        }
-        
-        .reel-content h4 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        
-        .reel-content p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .reel-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        
-        .reel-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            color: white;
-        }
-        
-        .reel-actions i {
-            font-size: 20px;
-        }
-        
-        .reel-actions span {
-            font-size: 12px;
-        }
-        
-        .reel-music {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: white;
-            font-size: 12px;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        
-        /* Video grid styles */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .video-item {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
+            padding: 8px 15px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .video-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-        
-        .video-thumb {
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(45deg, #2193b0, #6dd5ed);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 30px;
-        }
-        
-        .video-info {
-            padding: 12px;
-            background: white;
-        }
-        
-        .video-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 14px;
-        }
-        
-        .video-duration {
-            font-size: 12px;
-            color: var(--gray);
-        }
-        
-        /* Sidebar styles */
-        .pages-list {
             margin-top: 20px;
-        }
-        
-        .page-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-radius: 10px;
-            background: var(--light);
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .page-item:hover {
-            background: rgba(24, 119, 242, 0.1);
-        }
-        
-        .page-item.active {
-            background: rgba(24, 119, 242, 0.2);
-            border-left: 4px solid var(--primary);
-        }
-        
-        .page-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            font-weight: bold;
-        }
-        
-        .page-details h4 {
-            font-size: 15px;
-            margin-bottom: 3px;
-        }
-        
-        .page-details p {
-            font-size: 12px;
-            color: var(--gray);
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            color: var(--gray);
-            font-size: 14px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .login-card {
-                width: 90%;
-                padding: 30px 20px;
-            }
         }
     </style>
 </head>
@@ -537,189 +158,56 @@
             <button class="login-btn" id="fbLoginBtn">
                 <i class="fab fa-facebook"></i> Continue with Facebook
             </button>
+            <div class="spinner" id="spinner"></div>
+            <div class="status info" id="status"></div>
         </div>
     </div>
     
     <!-- Main App (hidden initially) -->
     <div class="app-container" id="appContainer">
-        <div class="container">
-            <header>
-                <div class="logo">
-                    <i class="fab fa-facebook"></i>
-                    <h1>ReelPoster</h1>
-                </div>
-                <div class="user-info" id="userInfo">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <span id="userName">User</span>
-                </div>
-            </header>
-
-            <div class="main-content">
-                <div class="main-section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-cloud-upload-alt"></i> Upload Reels</h2>
-                        </div>
-                        
-                        <div class="upload-area" id="uploadArea">
-                            <i class="fas fa-video"></i>
-                            <h3>Upload Your Reel Videos</h3>
-                            <p>Click to browse or drag & drop your video files</p>
-                            <button class="btn btn-primary">
-                                <i class="fas fa-folder-open"></i> Select Videos
-                            </button>
-                            <input type="file" id="fileInput" multiple accept="video/*">
-                        </div>
-                        
-                        <div id="videoGridContainer" style="display: none;">
-                            <h3 class="preview-title"><i class="fas fa-film"></i> Selected Videos</h3>
-                            <div class="video-grid" id="videoGrid">
-                                <!-- Videos will be dynamically added here -->
-                            </div>
-                            
-                            <div class="form-group" style="margin-top: 20px;">
-                                <label for="caption">Reel Caption</label>
-                                <textarea id="caption" placeholder="Add an engaging caption for your reel..."></textarea>
-                            </div>
-                            
-                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div class="form-group">
-                                    <label for="schedule">Schedule Date & Time</label>
-                                    <input type="datetime-local" id="schedule">
-                                </div>
-                                <div class="form-group">
-                                    <label for="page">Post As</label>
-                                    <select id="page">
-                                        <!-- Pages will be loaded dynamically -->
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <button class="btn btn-primary" id="scheduleBtn" style="width: 100%; margin-top: 15px;">
-                                <i class="fas fa-calendar-check"></i> Schedule Reel
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-play-circle"></i> Reel Preview</h2>
-                        </div>
-                        
-                        <div class="preview-container">
-                            <div class="preview-title">
-                                <i class="fas fa-mobile-alt"></i> How your reel will appear
-                            </div>
-                            <div class="preview-box">
-                                <div class="reel-player">
-                                    <div class="reel-top">
-                                        <div class="reel-user">
-                                            <div class="reel-user-avatar" id="previewAvatar"></div>
-                                            <span id="previewName">Your Page</span>
-                                        </div>
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </div>
-                                    
-                                    <div class="reel-content">
-                                        <h4>New Product Launch!</h4>
-                                        <p>Behind the scenes of our development process</p>
-                                    </div>
-                                    
-                                    <div class="reel-bottom">
-                                        <div class="reel-actions">
-                                            <div>
-                                                <i class="fas fa-heart"></i>
-                                                <span>2.4K</span>
-                                            </div>
-                                            <div>
-                                                <i class="fas fa-comment"></i>
-                                                <span>348</span>
-                                            </div>
-                                            <div>
-                                                <i class="fas fa-share"></i>
-                                                <span>127</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="reel-music">
-                                            <i class="fas fa-music"></i>
-                                            <span>Original Sound - Your Brand</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="sidebar">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-user"></i> Your Account</h2>
-                        </div>
-                        
-                        <div class="user-info" style="padding: 15px;">
-                            <div class="user-avatar" id="sidebarAvatar">U</div>
-                            <div>
-                                <h4 id="sidebarUserName">User Name</h4>
-                                <p id="sidebarUserEmail">user@example.com</p>
-                            </div>
-                        </div>
-                        
-                        <button class="btn btn-outline" style="width: 100%; margin-top: 15px;" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt"></i> Log Out
-                        </button>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-flag"></i> Your Pages</h2>
-                        </div>
-                        
-                        <div class="pages-list" id="pagesList">
-                            <!-- Pages will be loaded dynamically -->
-                            <div class="page-item active">
-                                <div class="page-avatar">T</div>
-                                <div class="page-details">
-                                    <h4>Tech Innovations</h4>
-                                    <p>Page</p>
-                                </div>
-                            </div>
-                            <div class="page-item">
-                                <div class="page-avatar">M</div>
-                                <div class="page-details">
-                                    <h4>Marketing Pro</h4>
-                                    <p>Page</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div id="userInfoContainer">
+            <div class="user-info">
+                <img id="userAvatar" class="user-avatar" src="" alt="Profile Picture">
+                <div>
+                    <h3 id="userName"></h3>
+                    <p id="userEmail"></p>
                 </div>
             </div>
-            
-            <div class="footer">
-                <p>© 2023 ReelPoster - Facebook Reel Scheduler</p>
-                <p style="margin-top: 10px; font-size: 13px; opacity: 0.8;">Securely connected to Facebook</p>
-            </div>
+            <h3>Your Facebook Pages:</h3>
+            <ul id="pagesList"></ul>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
     </div>
 
     <script>
-        // Facebook SDK initialization
+        // Replace with your actual Facebook App ID
+        const FB_APP_ID = 'YOUR_APP_ID';
+        
+        // DOM Elements
+        const loginContainer = document.getElementById('loginContainer');
+        const appContainer = document.getElementById('appContainer');
+        const fbLoginBtn = document.getElementById('fbLoginBtn');
+        const statusEl = document.getElementById('status');
+        const spinner = document.getElementById('spinner');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Initialize status
+        updateStatus('Checking login status...', 'info');
+        
+        // 1. Initialize Facebook SDK
         window.fbAsyncInit = function() {
             FB.init({
-                appId: 'YOUR_FACEBOOK_APP_ID',
+                appId: FB_APP_ID,
                 cookie: true,
                 xfbml: true,
                 version: 'v19.0'
             });
             
-            FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
+            // Check login status
+            checkLoginStatus();
         };
 
-        // Load Facebook SDK
+        // 2. Load the Facebook SDK
         (function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
@@ -728,237 +216,138 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
-        // Login status callback
+        // 3. Check login status
+        function checkLoginStatus() {
+            showSpinner();
+            FB.getLoginStatus(function(response) {
+                hideSpinner();
+                statusChangeCallback(response);
+            }, true); // Force a fresh check
+        }
+
+        // 4. Login status callback
         function statusChangeCallback(response) {
+            console.log('statusChangeCallback');
+            console.log(response);
+            
             if (response.status === 'connected') {
-                // User is logged in with Facebook
+                // User is logged in and authorized your app
+                updateStatus('Login successful! Loading your information...', 'success');
                 handleLogin(response.authResponse);
             } else {
-                // User is not logged in
-                document.getElementById('loginContainer').style.display = 'flex';
-                document.getElementById('appContainer').style.display = 'none';
+                // User is not logged in or hasn't authorized your app
+                updateStatus('Please log in with Facebook to continue', 'info');
+                showLoginUI();
             }
         }
 
-        // Handle Facebook login
-        document.getElementById('fbLoginBtn').addEventListener('click', function() {
+        // 5. Handle login button click
+        fbLoginBtn.addEventListener('click', function() {
+            showSpinner();
+            updateStatus('Connecting to Facebook...', 'info');
+            
             FB.login(function(response) {
+                hideSpinner();
+                
                 if (response.authResponse) {
+                    updateStatus('Login successful! Loading your information...', 'success');
                     handleLogin(response.authResponse);
                 } else {
-                    showNotification('User cancelled login or did not fully authorize.', 'error');
+                    if (response.status === 'not_authorized') {
+                        updateStatus('You need to authorize the app to continue', 'error');
+                    } else {
+                        updateStatus('Login cancelled or an error occurred', 'error');
+                    }
                 }
-            }, {scope: 'public_profile,email,pages_manage_posts,pages_read_engagement'});
-        });
+            }, {
+                scope: 'public_profile,email,pages_manage_posts,pages_read_engagement',
+                return_scopes: true
+            });
+        }, false);
 
-        // Handle successful login
+        // 6. Handle successful login
         function handleLogin(authResponse) {
+            showSpinner();
             const accessToken = authResponse.accessToken;
             
             // Get user info
-            FB.api('/me', {fields: 'name,email,picture'}, function(response) {
-                // Show main app
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'block';
-                
-                // Update user info
-                document.getElementById('userName').textContent = response.name;
-                document.getElementById('sidebarUserName').textContent = response.name;
-                document.getElementById('sidebarUserEmail').textContent = response.email || '';
-                
-                // Set avatar initials
-                const nameParts = response.name.split(' ');
-                const initials = nameParts[0].charAt(0) + (nameParts.length > 1 ? nameParts[1].charAt(0) : '');
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('sidebarAvatar').textContent = initials;
-                document.getElementById('previewAvatar').textContent = initials.charAt(0);
-                
-                // Get user pages
-                FB.api('/me/accounts', function(response) {
-                    const pagesList = document.getElementById('pagesList');
-                    const pageSelect = document.getElementById('page');
-                    
-                    // Clear existing options
-                    pagesList.innerHTML = '';
-                    pageSelect.innerHTML = '';
-                    
-                    if (response.data && response.data.length > 0) {
-                        response.data.forEach((page, index) => {
-                            // Add to pages list
-                            const pageItem = document.createElement('div');
-                            pageItem.className = 'page-item' + (index === 0 ? ' active' : '');
-                            pageItem.innerHTML = `
-                                <div class="page-avatar">${page.name.charAt(0)}</div>
-                                <div class="page-details">
-                                    <h4>${page.name}</h4>
-                                    <p>Page</p>
-                                </div>
-                            `;
-                            pageItem.addEventListener('click', function() {
-                                document.querySelectorAll('.page-item').forEach(item => {
-                                    item.classList.remove('active');
-                                });
-                                this.classList.add('active');
-                                document.getElementById('page').value = page.name;
-                                document.getElementById('previewName').textContent = page.name;
-                            });
-                            pagesList.appendChild(pageItem);
-                            
-                            // Add to select dropdown
-                            const option = document.createElement('option');
-                            option.value = page.id;
-                            option.textContent = page.name;
-                            if (index === 0) {
-                                option.selected = true;
-                                document.getElementById('previewName').textContent = page.name;
-                            }
-                            pageSelect.appendChild(option);
-                        });
-                    } else {
-                        pagesList.innerHTML = '<p style="padding: 15px; text-align: center;">No pages found</p>';
-                    }
+            FB.api('/me', {fields: 'name,email,picture.width(200)'}, function(userResponse) {
+                if (userResponse && !userResponse.error) {
+                    // Get pages user manages
+                    FB.api('/me/accounts', function(pagesResponse) {
+                        hideSpinner();
+                        
+                        if (pagesResponse && !pagesResponse.error && pagesResponse.data) {
+                            showAppUI(userResponse, pagesResponse.data);
+                        } else {
+                            updateStatus('Error loading your pages. Please try again.', 'error');
+                            console.error('Error getting pages:', pagesResponse.error);
+                        }
+                    });
+                } else {
+                    hideSpinner();
+                    updateStatus('Error loading user information. Please try again.', 'error');
+                    console.error('Error getting user info:', userResponse.error);
+                }
+            });
+        }
+
+        // 7. Show the main app UI
+        function showAppUI(user, pages) {
+            loginContainer.style.display = 'none';
+            appContainer.style.display = 'block';
+            
+            // Display user info
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email || 'Email not provided';
+            document.getElementById('userAvatar').src = user.picture.data.url;
+            
+            // Display pages
+            const pagesList = document.getElementById('pagesList');
+            pagesList.innerHTML = '';
+            
+            if (pages.length > 0) {
+                pages.forEach(page => {
+                    const li = document.createElement('li');
+                    li.textContent = `${page.name} (${page.id})`;
+                    pagesList.appendChild(li);
                 });
-            });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No pages found';
+                pagesList.appendChild(li);
+            }
         }
 
-        // Logout button
-        document.getElementById('logoutBtn').addEventListener('click', function() {
+        // 8. Show login UI
+        function showLoginUI() {
+            loginContainer.style.display = 'flex';
+            appContainer.style.display = 'none';
+        }
+
+        // 9. Logout functionality
+        logoutBtn.addEventListener('click', function() {
+            showSpinner();
             FB.logout(function(response) {
-                document.getElementById('loginContainer').style.display = 'flex';
-                document.getElementById('appContainer').style.display = 'none';
+                hideSpinner();
+                showLoginUI();
+                updateStatus('Logged out successfully', 'success');
             });
         });
 
-        // Upload area functionality
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const videoGrid = document.getElementById('videoGrid');
-        const videoGridContainer = document.getElementById('videoGridContainer');
-        
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('active');
-        });
-        
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('active');
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('active');
-            
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                handleFiles(e.dataTransfer.files);
-            }
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files && e.target.files.length > 0) {
-                handleFiles(e.target.files);
-            }
-        });
-        
-        function handleFiles(files) {
-            const fileCount = Math.min(files.length, 10);
-            videoGrid.innerHTML = '';
-            
-            for (let i = 0; i < fileCount; i++) {
-                const videoItem = document.createElement('div');
-                videoItem.className = 'video-item';
-                videoItem.innerHTML = `
-                    <div class="video-thumb">
-                        <i class="fas fa-play-circle"></i>
-                    </div>
-                    <div class="video-info">
-                        <div class="video-title">${files[i].name}</div>
-                        <div class="video-duration">${Math.floor(Math.random() * 60) + 15}s</div>
-                    </div>
-                `;
-                videoGrid.appendChild(videoItem);
-            }
-            
-            videoGridContainer.style.display = 'block';
-            showNotification(`${fileCount} videos uploaded successfully`);
+        // Helper functions
+        function updateStatus(message, type) {
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + (type || 'info');
         }
 
-        // Schedule button
-        document.getElementById('scheduleBtn').addEventListener('click', function() {
-            const videoCount = document.querySelectorAll('.video-item').length;
-            if (videoCount === 0) {
-                showNotification('Please upload videos first', 'error');
-                return;
-            }
-            
-            const caption = document.getElementById('caption').value;
-            const schedule = document.getElementById('schedule').value;
-            const pageId = document.getElementById('page').value;
-            const pageName = document.getElementById('page').options[document.getElementById('page').selectedIndex].text;
-            
-            if (!schedule) {
-                showNotification('Please select a schedule date and time', 'error');
-                return;
-            }
-            
-            // Format date for display
-            const scheduleDate = new Date(schedule);
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            const formattedDate = scheduleDate.toLocaleDateString('en-US', options);
-            
-            // In a real app, you would post to Facebook API here
-            // For now, we'll just show a success message
-            showNotification(`Scheduled ${videoCount} reels for ${pageName} at ${formattedDate}`);
-            
-            // Reset form
-            videoGrid.innerHTML = '';
-            videoGridContainer.style.display = 'none';
-            document.getElementById('caption').value = '';
-        });
-
-        // Show notification
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
-                color: white;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                font-weight: 500;
-                z-index: 1000;
-                animation: fadeIn 0.3s, fadeOut 0.3s 2.7s forwards;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+        function showSpinner() {
+            spinner.style.display = 'block';
         }
 
-        // Add CSS for animation
-        const style = document.createElement('style');
-        style.innerHTML = `
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            @keyframes fadeOut {
-                from { opacity: 1; transform: translateY(0); }
-                to { opacity: 0; transform: translateY(-20px); }
-            }
-        `;
-        document.head.appendChild(style);
+        function hideSpinner() {
+            spinner.style.display = 'none';
+        }
     </script>
 </body>
 </html>
